@@ -35,3 +35,10 @@ class Piece(Polygon):
             y1 = end.imag * scale
 
             self.segments.append(Segment(x0,y0,x1,y1))
+
+    def translate(self, x_dist, y_dist):
+        for segment in self.segments:
+            segment.x0 += x_dist
+            segment.x1 += x_dist
+            segment.y0 += y_dist
+            segment.y1 += y_dist

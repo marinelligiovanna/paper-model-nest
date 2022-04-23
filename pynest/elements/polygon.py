@@ -48,6 +48,7 @@ class Polygon:
 
         if inplace:
             pol = self
+            self.segments = []
         else:
             pol = Polygon()
             

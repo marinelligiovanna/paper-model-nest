@@ -1,3 +1,4 @@
+from cmath import exp
 from scipy.spatial import ConvexHull
 from pynest.elements.segment import Segment
 from pynest.elements.polygon import Polygon
@@ -16,7 +17,12 @@ def convex_hull_polygon(points):
 
     return chull
 
-def create_rectangle(xmin, xmax, ymin, ymax) -> Polygon:
+def create_rectangle(xmin, xmax, ymin, ymax, expand_border:float = 2.5) -> Polygon:
+    xmin -= expand_border
+    xmax += expand_border
+    ymin -= expand_border
+    ymax += expand_border
+    
     s1 = Segment(xmin, ymin, xmin, ymax)
     s2 = Segment(xmin, ymax, xmax, ymax)
     s3 = Segment(xmax, ymax, xmax, ymin)

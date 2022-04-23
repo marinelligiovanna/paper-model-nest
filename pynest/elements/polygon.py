@@ -31,7 +31,7 @@ class Polygon:
         
         return (x_center, y_center,)
 
-    def rotate(self, theta, center: tp.Tuple[float, float] = None):
+    def rotate(self, theta, center: tp.Tuple[float, float] = None, inplace=False):
 
         if center is None:
             center = self.centroid()
@@ -46,8 +46,11 @@ class Polygon:
 
         P = np.matmul(R, P - C) + C 
 
-        # Create new Polygon
-        pol = Polygon()
+        if inplace:
+            pol = self
+        else:
+            pol = Polygon()
+            
         x0 = P[0,0]
         y0 = P[1,0]
 

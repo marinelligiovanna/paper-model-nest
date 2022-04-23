@@ -1,18 +1,27 @@
 from pynest.elements.polygon import Polygon
 from pynest.elements.piece import Piece
-from pynest.elements.segment import Segment
 import numpy as np
 from pynest.utils import convex_hull_polygon, create_rectangle
 import typing as tp
 
 class BoundingRect:
     
-    def __init__(self, piece:Piece):
-        super.__init__()
+    def __init__(self, piece:Piece, shield:int = 2.5):
         self.piece: Piece = piece
-        self.bounding_rect: Polygon = None
+        self.shield = shield
+        self.x = None
+        self.y = None
+        self.width = None
+        self.height = None
 
-    def set_min_bounding_rect(self, rotate_piece:bool=True):
+        self._set_min_bounding_rect()
+
+    def _add_shield(self):
+        self.width += 2 * self.shield
+        self.height += 2 * self.shield
+        self.piece.translate(self.shield, self.shield)
+
+    def _set_min_bounding_rect(self):
         points = np.array(self.piece.to_points())
         convex_hull = convex_hull_polygon(points)
 
@@ -34,21 +43,34 @@ class BoundingRect:
             ymin = np.min(ys)
             ymax = np.max(ys)
 
-            area = (ymax - ymin) * (xmax - xmin)
-            rect = create_rectangle(xmin, xmax, ymin, ymax)
+            width = xmax - xmin
+            height = ymax - ymin
+            area = width * height
 
             if area < min_area:
                 self.theta = theta
-                self.bounding_rect = rect
-                min_area = area
+                self.x = xmin
+                self.y = ymin
+                self.width = width
+                self.height = height
+                # self.bounding_rect = rect
+                # min_area = area
 
-        if rotate_piece:
-            self.piece = self.piece.rotate(-self.theta, (0,0,))
-    
-        def rotate(theta:float, center:tp.Tuple[float, float] = None):
-            self.piece = self.piece.rotate(theta, center)
-            self.bounding_rect = self.bounding_rect.rotate(theta, center)
-            self.theta = self.theta + theta
+        self.piece.rotate(-self.theta, (0,0,), inplace=True)
 
-            return self
+        self._add_shield()
+        self._translate_to_origin()
 
+    def _translate_to_origin(self):
+        self.piece.translate(-self.x, -self.y)
+        self.x = 0.
+        self.y = 0.
+
+    def plot(self):
+        x0 = self.x
+        y0 = self.y
+        x1 = self.x + self.width
+        y1 = self.y + self.height
+        
+        rect = create_rectangle(x0, x1, y0, y1)
+        rect.plot()

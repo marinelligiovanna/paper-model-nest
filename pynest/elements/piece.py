@@ -6,7 +6,8 @@ import typing as tp
 
 class Piece(Polygon):
     
-    def __init__(self):
+    def __init__(self, name:str = ""):
+        self.name=name
         self.segments: tp.List[Segment] = []
 
     def _get_scale(self, width:float, viewbox:ViewBox):

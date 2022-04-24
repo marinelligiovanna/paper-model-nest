@@ -1,27 +1,23 @@
-from pynest.elements.polygon import Polygon
+from elements.rect import Rect
 from pynest.elements.piece import Piece
 import numpy as np
-from pynest.utils import convex_hull_polygon, create_rectangle
-import typing as tp
+from pynest.utils import convex_hull_polygon
 
 class BoundingRect:
     
     def __init__(self, piece:Piece, shield:int = 2.5):
         self.piece: Piece = piece
         self.shield = shield
-        self.x = None
-        self.y = None
-        self.width = None
-        self.height = None
+        self.rect : Rect = None
 
-        self._set_min_bounding_rect()
+        self._set_bounding_rect()
 
     def _add_shield(self):
-        self.width += 2 * self.shield
-        self.height += 2 * self.shield
+        self.rect.width += 2 * self.shield
+        self.rect.height += 2 * self.shield
         self.piece.translate(self.shield, self.shield)
 
-    def _set_min_bounding_rect(self):
+    def _set_bounding_rect(self):
         points = np.array(self.piece.to_points())
         convex_hull = convex_hull_polygon(points)
 
@@ -48,14 +44,10 @@ class BoundingRect:
             area = width * height
 
             if area < min_area:
+                min_area = area
                 self.theta = theta
-                self.x = xmin
-                self.y = ymin
-                self.width = width
-                self.height = height
-                # self.bounding_rect = rect
-                # min_area = area
-
+                self.rect = Rect(xmin, ymin, width, height)
+                
         self.piece.rotate(-self.theta, (0,0,), inplace=True)
 
         self._add_shield()
@@ -63,14 +55,8 @@ class BoundingRect:
 
     def _translate_to_origin(self):
         self.piece.translate(-self.x, -self.y)
-        self.x = 0.
-        self.y = 0.
+        self.rect.translate_to(0,0)
 
     def plot(self):
-        x0 = self.x
-        y0 = self.y
-        x1 = self.x + self.width
-        y1 = self.y + self.height
-        
-        rect = create_rectangle(x0, x1, y0, y1)
-        rect.plot()
+        self.rect.plot()
+        self.piece.plot()

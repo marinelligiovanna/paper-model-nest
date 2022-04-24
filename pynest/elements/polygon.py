@@ -6,12 +6,11 @@ import typing as tp
 class Polygon:
     
     def __init__(self):
-        self.segments = []
+        self.segments : tp.List[Segment] = []
 
     def add_segment(self, segment:Segment):
         self.segments.append(segment)
 
-    
     def to_points(self) -> tp.List[tp.Tuple[float, float]]:
         points = []
         for segment in self.segments:

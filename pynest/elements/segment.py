@@ -8,6 +8,9 @@ class Segment:
         self.x1 = x1
         self.y1 = y1
 
+    def __repr__(self) -> str:
+        return f"Segment({self.x0}, {self.y0}, {self.x1}, {self.y1})"
+    
     def start(self):
         return (self.x0, self.y0,)
 

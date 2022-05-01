@@ -1,4 +1,6 @@
 import typing as tp
+
+from numpy import rec
 from pynest.elements.rect import Rect
 
 class Bin:
@@ -69,6 +71,79 @@ class Bin:
 
         return parts
 
+    def _free_rects_without_intersection(self, free_rect:Rect, intersection:Rect) ->tp.List[Rect]:
+        fr = []
+
+        # Rectangle at the left of the intersection
+        if free_rect.left < intersection.left:
+            fr.append(Rect(free_rect.x,
+                          free_rect.y, 
+                          intersection.left - free_rect.left, 
+                          free_rect.height))
+        # Rectangle at the bottom of the intersection
+        if free_rect.bottom < intersection.bottom:
+            fr.append(Rect(free_rect.x,
+                          free_rect.y,
+                          free_rect.width,
+                          intersection.bottom - intersection.bottom))
+        # Rectangle at the right of the intersection
+        if free_rect.right > intersection.right:
+            fr.append(Rect(intersection.x,
+                          free_rect.y,
+                          free_rect.right - intersection.right,
+                          free_rect.height))
+        # Rectangle at the top of the intersection
+        if free_rect.top > intersection.top:
+            fr.append(Rect(free_rect.x,
+                          intersection.y,
+                          free_rect.width,
+                          free_rect.top - intersection.top))
+
+        return fr
+
+    def _remove_contained_rects(self, rects: tp.List[Rect]) -> tp.List[Rect]:
+        r = []
+        N = len(rects)
+
+        for i in range(0, N):
+            ri = rects[i]
+            append_ri = True
+            
+            for j in range(i+1, N):
+                rj = rects[j]
+                append_rj = True
+                
+                # Rj is contained in Ri - Do not append
+                if ri.contains(rj):
+                    append_rj = False
+                # Ri is contained in Rj - Do not append
+                elif rj.contains(ri):
+                    append_ri = False
+                
+                if append_rj:
+                    r.append(rj)
+
+            if append_ri:
+                r.append(ri)
+
+        return r
+
+    def _remove_intersections(self, rect:Rect):
+        r = []
+
+        for free_rect in self.free_rects:
+            if rect.intersects(free_rect):
+                intersection = free_rect.intersection_with(rect)
+                new_rects = self._free_rects_without_intersection(free_rect, intersection)
+                r = r + new_rects
+            else:
+                r.append(free_rect)
+
+        r = self._remove_contained_rects(r)
+
+        self.free_rects = r
+        
+
     def insert(self, rect: Rect):
         
         # It is not possible to insert the current
@@ -97,7 +172,9 @@ class Bin:
             self.free_rects = self.free_rects + parts
             self.free_rects.remove(bfr)
 
-            # Remove intersections
+            # Remove intersections with the current rectangle
+            # and also fully-contained free rectangles
+            self._remove_intersections(rect)
 
 
             return True

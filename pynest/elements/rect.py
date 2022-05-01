@@ -79,6 +79,21 @@ class Rect:
           (self.right < rect.left) or (rect.right < self.left):
           return False 
 
+    def intersection_with(self, rect):
+        if not rect.intersects(self):
+            return None
+
+        x_left = max(self.x, rect.x)
+        y_bottom = max(self.y, rect.y)
+        x_right = min(self.right, rect.right)
+        y_top = min(self.top, rect.top)
+
+        width = x_right - x_left
+        height = y_top - y_bottom
+        
+        return Rect(x_left, y_bottom, width, height)
+
+
     def fit_into(self, rect) -> bool:
         """Checks if the current rectangle fits
         inside the given rectangle.
@@ -93,6 +108,17 @@ class Rect:
             return True
         return False
 
+    def contains(self, rect) -> bool:
+        fits_left = rect.left >= self.left and rect.left <= self.right
+        fits_right = rect.right >= self.left and rect.right <= self.right
+        fits_bottom = rect.bottom >= self.bottom and rect.bottom <= self.top
+        fits_top = rect.top >= self.bottom and rect.top <= self.top
+
+        if fits_left and fits_right and fits_bottom and fits_top:
+            return True
+
+        return False
+     
     def plot(self) -> None:
         """Make a plot of the rectangle.
         """

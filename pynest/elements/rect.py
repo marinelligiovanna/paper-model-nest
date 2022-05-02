@@ -28,7 +28,7 @@ class Rect:
     
     @property
     def bottom(self):
-        return self.y   
+         return self.y   
 
     @property
     def top(self):
@@ -75,11 +75,21 @@ class Rect:
         Returns:
             bool: True, if there is an intersection and False otherwise.
         """
-        if(self.bottom > rect.top) or (rect.bottom > self.top) or \
-          (self.right < rect.left) or (rect.right < self.left):
+        if(self.bottom >= rect.top) or (rect.bottom >= self.top) or \
+          (self.right <= rect.left) or (rect.right <= self.left):
           return False 
+        return True
 
     def intersection_with(self, rect):
+        """Returns the intersection between this
+        rectangle and another rectangle (rect)
+
+        Args:
+            rect (Rect): The rectangle to return the intersection with
+
+        Returns:
+            Rect: The intersection if it exists or None if it doesn't 
+        """
         if not rect.intersects(self):
             return None
 
@@ -109,6 +119,15 @@ class Rect:
         return False
 
     def contains(self, rect) -> bool:
+        """Checks if the current rectangle contains
+        the given rectangle
+
+        Args:
+            rect (Rect): The rectangle to check if fits in the current
+
+        Returns:
+            bool: True if rect is contained and False otherwise
+        """
         fits_left = rect.left >= self.left and rect.left <= self.right
         fits_right = rect.right >= self.left and rect.right <= self.right
         fits_bottom = rect.bottom >= self.bottom and rect.bottom <= self.top

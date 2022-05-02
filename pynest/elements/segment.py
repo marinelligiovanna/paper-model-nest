@@ -39,7 +39,7 @@ class Segment:
         theta considering the given center.
 
         Args:
-            theta (float): The theta to rotate the segment
+            theta (float): The angle to rotate the segment
             center (tuple, optional): The center to rotate around. Defaults to (0,0,).
 
         """

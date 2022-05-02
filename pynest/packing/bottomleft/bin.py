@@ -1,6 +1,4 @@
 import typing as tp
-
-from numpy import rec
 from pynest.elements.rect import Rect
 
 class Bin:
@@ -22,6 +20,14 @@ class Bin:
         return self.next
 
     def _BL_criteria(self, free_rect:Rect, rect: Rect):
+        """The Bottom-Left (BL) criteria consists in finding the 
+        mininum height to put the rectangle and the minimum x axis value.
+        The x-axis position is the second criteria to be considered
+
+        Args:
+            free_rect (Rect): The free rectangle to fit the rectangle.
+            rect (Rect): The rectangle to be fitted
+        """
         return free_rect.y + rect.height, free_rect.x
 
     def _find_best_free_rect(self, rect: Rect) -> Rect:
@@ -48,7 +54,17 @@ class Bin:
 
         return best_rect
 
-    def _split_free_rect(self, free_rect:Rect, rect: Rect):
+    def _split_free_rect(self, free_rect:Rect, rect: Rect) -> tp.List[Rect]:
+        """Given a free rectangle, split it into two
+        parts to be the new free rectangles.
+
+        Args:
+            free_rect (Rect): The free rectangle to be splitted
+            rect (Rect): The rectangle that created the split.
+
+        Returns:
+            tp.List[Rect]: The new free rectangles made from this one.
+        """
         parts = []
 
         # Horizontal split
@@ -71,7 +87,18 @@ class Bin:
 
         return parts
 
-    def _free_rects_without_intersection(self, free_rect:Rect, intersection:Rect) ->tp.List[Rect]:
+    def _remove_intersection_from_rect(self, free_rect:Rect, intersection:Rect) -> tp.List[Rect]:
+        """Give a free rectangle, remove an intersection rectangle, breaking
+        the free_rectangle into multiple pieces.
+
+        Args:
+            free_rect (Rect): The free rectangle to have the intersection removed
+            intersection (Rect): The intersection to be removed
+
+        Returns:
+            tp.List[Rect]: A list of new free rectangles made from the original
+            free rectangle without the intersection.
+        """
         fr = []
 
         # Rectangle at the left of the intersection
@@ -88,42 +115,47 @@ class Bin:
                           intersection.bottom - intersection.bottom))
         # Rectangle at the right of the intersection
         if free_rect.right > intersection.right:
-            fr.append(Rect(intersection.x,
+            fr.append(Rect(intersection.right,
                           free_rect.y,
                           free_rect.right - intersection.right,
                           free_rect.height))
         # Rectangle at the top of the intersection
         if free_rect.top > intersection.top:
             fr.append(Rect(free_rect.x,
-                          intersection.y,
+                          intersection.top,
                           free_rect.width,
                           free_rect.top - intersection.top))
 
         return fr
 
     def _remove_contained_rects(self, rects: tp.List[Rect]) -> tp.List[Rect]:
+        """Given a list of rectangles, remove the
+        rectangles that are contained in another one.
+
+        Args:
+            rects (tp.List[Rect]): The list of rectangles to remove
+            the rectangles that are contained
+
+        Returns:
+            tp.List[Rect]: The new list without contained rectangles.
+        """
         r = []
         N = len(rects)
 
+        # Checks if the rectangle rects[i]
+        # is contained in any other of the rectangles, except by
+        # itself
         for i in range(0, N):
             ri = rects[i]
-            append_ri = True
+            append = True
             
-            for j in range(i+1, N):
+            for j in range(0, N):
                 rj = rects[j]
-                append_rj = True
-                
-                # Rj is contained in Ri - Do not append
-                if ri.contains(rj):
-                    append_rj = False
-                # Ri is contained in Rj - Do not append
-                elif rj.contains(ri):
-                    append_ri = False
-                
-                if append_rj:
-                    r.append(rj)
 
-            if append_ri:
+                if i != j and rj.contains(ri):
+                    append = False
+              
+            if append:
                 r.append(ri)
 
         return r
@@ -134,7 +166,7 @@ class Bin:
         for free_rect in self.free_rects:
             if rect.intersects(free_rect):
                 intersection = free_rect.intersection_with(rect)
-                new_rects = self._free_rects_without_intersection(free_rect, intersection)
+                new_rects = self._remove_intersection_from_rect(free_rect, intersection)
                 r = r + new_rects
             else:
                 r.append(free_rect)
@@ -144,7 +176,15 @@ class Bin:
         self.free_rects = r
         
 
-    def insert(self, rect: Rect):
+    def insert(self, rect: Rect) -> bool:
+        """Insert a rectangle into the bin.
+
+        Args:
+            rect (Rect): The rectangle to be inserted
+
+        Returns:
+            bool: True if it was possible to insert the rectangle into the bin and Fale otherwise
+        """
         
         # It is not possible to insert the current
         # rectangle, since its area is greater than the
@@ -180,4 +220,10 @@ class Bin:
             return True
 
         return False
-            
+        
+if __name__ == "__main__":
+    bin = Bin(50,50)
+    rect1 = Rect(0,0,10,10)
+    bin.insert(rect1)
+    rect2 = Rect(0,0,10,20)
+    bin.insert(rect2)

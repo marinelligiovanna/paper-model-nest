@@ -57,3 +57,11 @@ class Segment:
     def plot(self):
         points = np.array([self.start, self.end])
         plt.plot(points[:,0], points[:,1], 'k-', lw=1)
+
+    def translate(self, x_dist:float, y_dist:float) -> None:
+        """Translates a segment to a given x and y distance.
+        """
+        self.x0 += x_dist
+        self.y0 += y_dist
+        self.x1 += x_dist
+        self.y1 += y_dist

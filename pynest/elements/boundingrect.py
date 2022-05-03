@@ -3,7 +3,10 @@ from pynest.elements.piece import Piece
 import numpy as np
 from pynest.utils import convex_hull_polygon
 
-class BoundingRect:
+class MinBoundingRect:
+    """A Minimum Bouding Rectangle represents a rectangle envelope
+    for a 2-d piece of the paper model.
+    """
     
     def __init__(self, piece:Piece, shield:int = 2.5):
         self.piece: Piece = piece
@@ -43,18 +46,21 @@ class BoundingRect:
             height = ymax - ymin
             area = width * height
 
+            # Save the bounding rectangle with the minimum area
             if area < min_area:
                 min_area = area
                 self.theta = theta
                 self.rect = Rect(xmin, ymin, width, height)
                 
+        # Rotathe the piece so that it fits into the bounding rectangle.
         self.piece.rotate(-self.theta, (0,0,), inplace=True)
 
+        # Add a shield and translate both piece and the rectangle to origin
         self._add_shield()
         self._translate_to_origin()
 
     def _translate_to_origin(self):
-        self.piece.translate(-self.x, -self.y)
+        self.piece.translate(-self.rect.x, -self.rect.y)
         self.rect.translate_to(0,0)
 
     def plot(self):

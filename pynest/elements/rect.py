@@ -62,6 +62,10 @@ class Rect:
         self.x = x
         self.y = y
 
+    def translate(self, x_dist: float, y_dist:float) -> None:
+        self.x += x_dist
+        self.y += y_dist
+        
     def area(self):
         return self.height * self.width
 

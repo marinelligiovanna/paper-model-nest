@@ -16,8 +16,8 @@ class MinBoundingRect(Rect):
         self._set_bounding_rect()
 
     def _add_shield(self):
-        self.rect.width += 2 * self.shield
-        self.rect.height += 2 * self.shield
+        self.width += 2 * self.shield
+        self.height += 2 * self.shield
         self.piece.translate(self.shield, self.shield)
 
     def _set_bounding_rect(self):
@@ -68,6 +68,6 @@ class MinBoundingRect(Rect):
         self.translate(x_dist, y_dist)
         self.piece.translate(x_dist, y_dist)
         
-    def plot(self):
-        super().plot()
+    def plot(self, color=None):
+        super().plot(color="r")
         self.piece.plot()

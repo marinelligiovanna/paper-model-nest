@@ -1,23 +1,12 @@
 import typing as tp
 from pynest.elements.rect import Rect
+from pynest.packing.bin import Bin
 
-class Bin:
+class BLBin(Bin):
 
     def __init__(self, width:float, height:float) -> None:
-        self.width = width
-        self.height = height
-        self.rects: tp.List[Rect] = []
+        super().__init__(width, height)
         self.free_rects: tp.List[Rect] = [Rect(0, 0, width, height)]
-        self.available_area = width * height
-
-        self.prev = None
-        self.next = None
-
-    def __repr__(self) -> str:
-        return f"Bin({self.width}, {self.height})"
-
-    def __next__(self):
-        return self.next
 
     def _BL_criteria(self, free_rect:Rect, rect: Rect):
         """The Bottom-Left (BL) criteria consists in finding the 

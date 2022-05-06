@@ -1,5 +1,5 @@
-from pynest.elements.bin import Bin
 from pynest.elements.rect import Rect
+from pynest.packing import Bin
 import typing as tp
 
 class PackingAlgorithm:
@@ -8,3 +8,7 @@ class PackingAlgorithm:
         self.bin_width = bin_width
         self.bin_height = bin_height
         self.rects: tp.List[Rect] = rects
+        self.bins: tp.List[Bin] = []
+
+    def pack(self):
+        raise NotImplementedError

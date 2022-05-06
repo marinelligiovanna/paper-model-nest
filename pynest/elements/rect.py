@@ -118,7 +118,7 @@ class Rect:
         Returns:
             bool: True if it fits and False otherwise.
         """
-        if self.width < rect.width and self.height < rect.height:
+        if self.width <= rect.width and self.height <= rect.height:
             return True
         return False
 
@@ -142,13 +142,17 @@ class Rect:
 
         return False
      
-    def plot(self) -> None:
+    def plot(self, color:str = "k") -> None:
         """Make a plot of the rectangle.
         """
-        xs = []
-        ys = []
-        for point in self:
-            xs.append(point[0])
-            ys.append(point[1])
+        pairs = [(self.bottom_left, self.top_left,),
+                 (self.top_left, self.top_right,),
+                 (self.top_right, self.bottom_right,),
+                 (self.bottom_right, self.bottom_left,)]
         
-        plt.plot(xs, ys, 'k-')
+        for pair in pairs:
+            p1, p2 = pair
+            x = [p1[0], p2[0]]
+            y = [p1[1], p2[1]]
+
+            plt.plot(x, y, f'{color}-')

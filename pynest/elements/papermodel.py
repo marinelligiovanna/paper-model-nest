@@ -29,7 +29,8 @@ class PaperModel:
         piece = Piece(name=name)
         for path in paths:
             d = path.get('d')
-            piece.add_segments_from_path(d, self.width, self.viewbox)
+            transform = path.get('transform')
+            piece.add_segments_from_path(d, self.width, self.viewbox, transform=transform)
 
         return piece
     

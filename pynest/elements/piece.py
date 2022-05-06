@@ -15,7 +15,32 @@ class Piece(Polygon):
         scale_width = viewbox.width - viewbox.xmin
         return width/scale_width
 
-    def add_segments_from_path(self, d:str, width: float, viewbox:ViewBox):
+    def _apply_transform(self, segment:Segment, transform:str) -> Segment:
+        if transform is None:
+            return segment
+
+        if transform.startswith('translate'):
+            transform = transform.replace("translate", "")\
+                                .replace("(", "")\
+                                .replace(")", "")
+            parts = transform.split(',')
+            x_dist = float(parts[0])
+            y_dist = float(parts[1])
+            segment.translate(x_dist, y_dist)
+        
+        if transform.startswith("rotate"):
+            transform = transform.replace("rotate", "")\
+                                .replace("(", "")\
+                                .replace(")", "")
+            parts = transform.split(",")
+            theta = float(parts[0])
+            xc = float(parts[1])
+            yc = float(parts[2])
+            segment.rotate(theta, (xc, yc,))
+
+        return segment
+
+    def add_segments_from_path(self, d:str, width: float, viewbox:ViewBox, transform:str = None):
         # Convert to path object
         path = spath.parse_path(d)
         segments = path._segments
@@ -30,9 +55,17 @@ class Piece(Polygon):
             start = segment.start
             end = segment.end
 
-            x0 = start.real * scale
-            y0 = start.imag * scale
-            x1 = end.real * scale
-            y1 = end.imag * scale
+            x0 = start.real 
+            y0 = start.imag 
+            x1 = end.real 
+            y1 = end.imag
 
-            self.segments.append(Segment(x0,y0,x1,y1))
+            segment = Segment(x0,y0,x1,y1)
+            segment = self._apply_transform(segment, transform)
+            
+            segment.x0 *= scale
+            segment.x1 *= scale
+            segment.y0 *= scale
+            segment.y1 *= scale
+
+            self.segments.append(segment)

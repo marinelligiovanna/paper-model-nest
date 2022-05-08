@@ -3,7 +3,6 @@ from pynest.packing.bottomleft import BLBin
 from pynest.elements.rect import Rect
 import typing as tp
 import os
-from pynest.elements.papermodel import PaperModel
 from pynest.elements.boundingrect import MinBoundingRect
 
 class BLPacker(PackingAlgorithm):
@@ -36,19 +35,3 @@ class BLPacker(PackingAlgorithm):
                 i += 1
             j += 1
 
-if __name__ == "__main__":
-    data_path = f"{os.getcwd()}/pynest/data/svgs"
-    model = PaperModel(f'{data_path}/harry-potter.svg')
-
-    rects = []
-
-    for piece in model.pieces:
-        br = MinBoundingRect(piece)
-        rects.append(br)
-
-    rects.pop(21)
-    rects.pop(28)
-    rects.pop(30)
-    rects.pop(30)
-    packer = BLPacker(297,210, rects)
-    packer.pack()

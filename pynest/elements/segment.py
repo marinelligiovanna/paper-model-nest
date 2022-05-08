@@ -13,6 +13,16 @@ class Segment:
 
     def __repr__(self) -> str:
         return f"Segment(({self.x0}, {self.y0}) -> ({self.x1}, {self.y1}))"
+
+    def __eq__(self, segment: object) -> bool:
+        return segment.x0 == self.x0 and \
+            segment.x1 == self.x1 and \
+            segment.y0 == self.y0 and \
+            segment.y1 == self.y1
+
+    @property
+    def points(self):
+        return ((self.x0, self.x1,), (self.y0, self.y1),)
     
     @property
     def start(self):
@@ -55,8 +65,8 @@ class Segment:
         return Segment(P[0,0], P[1,0], P[0,1], P[1,1])
 
     def plot(self):
-        points = np.array([self.start, self.end])
-        plt.plot(points[:,0], points[:,1], 'k-', lw=1)
+        x, y = [self.x0, self.x1], [self.y0, self.y1]
+        plt.plot(x, y, 'k-', lw=1)
 
     def translate(self, x_dist:float, y_dist:float) -> None:
         """Translates a segment to a given x and y distance.

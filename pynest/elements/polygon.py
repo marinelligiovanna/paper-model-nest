@@ -87,9 +87,14 @@ class Polygon:
         if center is None:
             center = self.centroid()
             
-        points = np.array(self.to_points())
+        # points = np.array(self.to_points())
+        x = []
+        y = []
+        for segment in self.segments:
+            x = x + [segment.x0, segment.x1]
+            y = y + [segment.y0, segment.y1]
 
-        P = np.array([points[:, 0], points[:, 1]])
+        P = np.array([x, y])
         C = np.array([[center[0] for _ in range(0, P.shape[1])],
                       [center[1] for _ in range(0, P.shape[1])]])
         R = np.array([[np.cos(theta), -np.sin(theta)], 
@@ -103,16 +108,13 @@ class Polygon:
         else:
             pol = Polygon()
             
-        x0 = P[0,0]
-        y0 = P[1,0]
+        for i in range(0, P.shape[1], 2):
+            x0 = P[0, i]
+            x1 = P[0, i+1]
+            y0 = P[1, i]
+            y1 = P[1, i+1]
 
-        for i in range(1, P.shape[1]):
-            x1 = P[0, i]
-            y1 = P[1, i]
             pol.add_segment(Segment(x0, y0, x1, y1))
-
-            x0 = x1
-            y0 = y1
 
         return pol
 
@@ -130,4 +132,5 @@ class Polygon:
 
     def plot(self) -> None:
         for segment in self.segments:
-            plt.plot(np.array([segment.x0, segment.x1]), np.array([segment.y0, segment.y1]), 'k-')
+            # plt.plot(np.array([segment.x0, segment.x1]), np.array([segment.y0, segment.y1]), 'k-')
+            segment.plot()

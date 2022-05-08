@@ -1,4 +1,4 @@
-from packing.bottomleft import BLPacker
+from pynest.packing.bottomleft import BLPacker
 from pynest.elements.piece import Piece
 from pynest.elements.viewbox import ViewBox
 from pynest.elements.boundingrect import MinBoundingRect
@@ -41,15 +41,15 @@ class PaperModel:
     def _create_pieces_from_groups(self, groups, pieces, name=None):
         for group in groups:
             group_groups = group.findall(f'./{self.svg_ns}g')
-            name = group.get('id') if not name else name + "-" + group.get('id')
 
             # Nested groups
             if len(group_groups) > 0:
-                self._create_pieces_from_groups(group_groups, pieces, name)
+                self._create_pieces_from_groups(group_groups, pieces, group.get('id'))
             # Groups containing only paths
             else:
+                piece_name = name + "-" + group.get('id') 
                 paths = group.findall(f'./{self.svg_ns}path')
-                pieces.append(self._create_piece_from_paths(paths, name))
+                pieces.append(self._create_piece_from_paths(paths, piece_name))
 
     def _read_svg(self):
         svg = xmltree.parse(self.svg_path)

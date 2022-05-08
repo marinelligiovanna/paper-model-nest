@@ -26,10 +26,9 @@ class Bin:
         raise NotImplementedError()
 
     def plot(self):
+        plt.figure(figsize=(9,6))
         for rect in self.rects:
             rect.plot(color="r")
 
         plt.xlim(0, self.width)
         plt.ylim(0, self.height)
-
-        plt.show()

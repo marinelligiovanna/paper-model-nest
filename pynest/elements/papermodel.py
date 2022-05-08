@@ -1,3 +1,4 @@
+from packing.bottomleft import BLPacker
 from pynest.elements.piece import Piece
 from pynest.elements.viewbox import ViewBox
 from pynest.elements.boundingrect import MinBoundingRect
@@ -6,6 +7,7 @@ import lxml.etree as xmltree
 from pynest.elements.piece import Piece
 from pynest.elements.viewbox import ViewBox
 
+A4 = (297, 210,)
 class PaperModel:
 
     def __init__(self, svg_path:str):
@@ -14,8 +16,10 @@ class PaperModel:
         self.height = None
         self.viewbox:ViewBox = None
         self.pieces: tp.List[Piece] = None
+        self.bounding_rects: tp.List[MinBoundingRect] = None
 
         self._read_svg()
+        self._set_bounding_rects()
 
     def _set_viewbox(self, root):
         vb = root.get('viewBox')
@@ -68,3 +72,22 @@ class PaperModel:
         self._create_pieces_from_groups(groups, pieces)
 
         self.pieces = pieces
+
+    def _set_bounding_rects(self):
+        self.bounding_rects = []
+
+        for piece in self.pieces:
+            mbr = MinBoundingRect(piece)
+            self.bounding_rects.append(mbr)
+
+    def pack_bottomleft(self, paper_dims:tp.Tuple[int, int] = A4):
+        width, height = paper_dims
+        packer = BLPacker(width, height, self.bounding_rects)
+        packer.pack()
+
+if __name__ == "__main__":
+    import os
+    data_path = f"{os.getcwd()}/pynest/data/svgs"
+
+    model = PaperModel(f'{data_path}/harry-potter.svg')
+    print(model)

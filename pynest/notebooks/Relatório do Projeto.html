@@ -14590,8 +14590,8 @@ body[data-format='mobile'] .jp-OutputArea-child .jp-OutputArea-output {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Ideia:"><strong>Ideia</strong>:<a class="anchor-link" href="#Ideia:">&#182;</a></h3><p>Utilizar heurísticas do problema de Bin Packing 2d com retângulos para encaixar as peças do paper model em uma folha A4.</p>
-<h3 id="Modelagem:"><strong>Modelagem</strong>:<a class="anchor-link" href="#Modelagem:">&#182;</a></h3><p>Todo o projeto está sendo estruturado em Python utilizando orientação a objetos para modelar o problema. As princiais entidades modeladas são as seguintes:</p>
+<h3 id="Ideia"><strong>Ideia</strong><a class="anchor-link" href="#Ideia">&#182;</a></h3><p>Utilizar heurísticas do problema de Bin Packing 2d com retângulos para encaixar as peças do paper model em uma folha A4.</p>
+<h3 id="Modelagem"><strong>Modelagem</strong><a class="anchor-link" href="#Modelagem">&#182;</a></h3><p>Todo o projeto está sendo estruturado em Python utilizando orientação a objetos para modelar o problema. As princiais entidades modeladas são as seguintes:</p>
 <ol>
 <li><strong>Segment:</strong> Represente um segmento de reta modelado como dois pares de pontos <code>(x0, y0) -&gt; (x1, y1)</code>.</li>
 <li><strong>Polygon:</strong> É um conjunto de segmentos que juntos representam uma figura fechada.</li>
@@ -14674,7 +14674,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h4 id="Problema-1:-Como-transformar-as-pe%C3%A7as-em-ret%C3%A2ngulos-para-reduzir-o-problema-a-um-Bin-Packing-2d?"><strong>Problema 1</strong>: Como transformar as pe&#231;as em ret&#226;ngulos para reduzir o problema a um Bin Packing 2d?<a class="anchor-link" href="#Problema-1:-Como-transformar-as-pe%C3%A7as-em-ret%C3%A2ngulos-para-reduzir-o-problema-a-um-Bin-Packing-2d?">&#182;</a></h4><p>A ideia foi encontrar o menor retângulo delimitador (minimum bounding rectangle - MBR) para uma peça do paper model para ter a menor área vazia possível. Para isso, <strong>é suficiente encontrar o menor bounding rectangle para o convex hull dos vértices da peça</strong>. Este problema é mais fácil de resolver, pois pode-se mostrar que, para figuras convexas, o minimum bounding rectangle deve ser paralelo a um dos lados, o que reduz muito o número de retângulos que devem ser testados para se encontrar o de menor área.</p>
+<h3 id="Problema-1:-Como-transformar-as-pe%C3%A7as-em-ret%C3%A2ngulos-para-reduzir-o-problema-a-um-Bin-Packing-2d?"><strong>Problema 1</strong>: Como transformar as pe&#231;as em ret&#226;ngulos para reduzir o problema a um Bin Packing 2d?<a class="anchor-link" href="#Problema-1:-Como-transformar-as-pe%C3%A7as-em-ret%C3%A2ngulos-para-reduzir-o-problema-a-um-Bin-Packing-2d?">&#182;</a></h3><p>A ideia foi encontrar o menor retângulo delimitador (minimum bounding rectangle - MBR) para uma peça do paper model para ter a menor área vazia possível. Para isso, <strong>é suficiente encontrar o menor bounding rectangle para o convex hull dos vértices da peça</strong>. Este problema é mais fácil de resolver, pois pode-se mostrar que, para figuras convexas, o minimum bounding rectangle deve ser paralelo a um dos lados, o que reduz muito o número de retângulos que devem ser testados para se encontrar o de menor área.</p>
 <p>Um problema desta abordagem é se o MBR tiver uma das dimensões maiores que o bin. Idealmente neste caso, queremos encontrar o MBR que caiba no bin.</p>
 <p>Como é uma restrição do problema <strong>ter um espaço mínimo de 5mm</strong> entre as peças, aumentamos o bounding rectangle em 2.5mm em cada lado para cumprir este requisito</p>
 <p><strong>Exemplo:</strong></p>
@@ -14869,7 +14869,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Pr%C3%B3ximos-passos:"><strong>Pr&#243;ximos passos</strong>:<a class="anchor-link" href="#Pr%C3%B3ximos-passos:">&#182;</a></h3><ul>
+<h3 id="Pr%C3%B3ximos-passos"><strong>Pr&#243;ximos passos</strong><a class="anchor-link" href="#Pr%C3%B3ximos-passos">&#182;</a></h3><ul>
 <li>Implementar métodos gerais para melhorar a inserção das peças no bin, como ordenar o input por área, escolher o bin de melhor fit ao invés de sempre tentar encaixar no primeiro.</li>
 <li>Implementar rotação dos retângulos de 90º - Eventualmente pode melhorar a inserção das peças no bin.</li>
 <li>Implementar outras heurísticas - Como os algoritmos da categoria de Maximal Rectangles são rápidos, podemos implementar diversas heurísticas de inserção e escolher a que deixa a menor área livre disponível.</li>
@@ -14885,7 +14885,7 @@ jp-needs-light-background
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<h3 id="Refer%C3%AAncias:"><strong>Refer&#234;ncias</strong>:<a class="anchor-link" href="#Refer%C3%AAncias:">&#182;</a></h3><ul>
+<h3 id="Refer%C3%AAncias"><strong>Refer&#234;ncias</strong><a class="anchor-link" href="#Refer%C3%AAncias">&#182;</a></h3><ul>
 <li>Jukka Jylang - A Thousand Ways to Pack the Bin - A Practical Approach to Two-Dimensional Rectangle Bin Packing (2010)</li>
 <li>Rectpack repository: <a href="https://github.com/secnot/rectpack">https://github.com/secnot/rectpack</a></li>
 <li>Greedypacker repository: <a href="https://github.com/solomon-b/greedypacker">https://github.com/solomon-b/greedypacker</a></li>

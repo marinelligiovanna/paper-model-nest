@@ -132,5 +132,9 @@ class Polygon:
 
     def plot(self) -> None:
         for segment in self.segments:
-            # plt.plot(np.array([segment.x0, segment.x1]), np.array([segment.y0, segment.y1]), 'k-')
             segment.plot()
+
+        xc, yc = self.centroid()
+        plt.text(xc, yc, self.name)
+
+        

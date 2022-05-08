@@ -33,6 +33,10 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y docker-ce-cli 
 
+# Pandoc
+sudo apt-get install pandoc
+sudo apt-get install texlive-xetex texlive-fonts-recommended texlive-plain-generic --fix-missing
+
 # Install Docker Compose
 RUN pip install docker-compose
 

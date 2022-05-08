@@ -155,4 +155,4 @@ class Rect:
             x = [p1[0], p2[0]]
             y = [p1[1], p2[1]]
 
-            plt.plot(x, y, f'{color}-')
+            plt.plot(x, y, f'{color}-', lw=1)

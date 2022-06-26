@@ -133,11 +133,12 @@ class Polygon:
         for segment in self.segments:
             segment.translate(x_dist, y_dist)
 
-    def plot(self) -> None:
+    def plot(self, show_names:bool=True, **kwargs) -> None:
         for segment in self.segments:
             segment.plot()
 
-        xc, yc = self.centroid()
-        plt.text(xc, yc, self.name)
+        if show_names:
+            xc, yc = self.centroid()
+            plt.text(xc, yc, self.name)
 
         

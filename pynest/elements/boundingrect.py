@@ -69,9 +69,10 @@ class MinBoundingRect(Rect):
         self.translate(x_dist, y_dist)
         self.piece.translate(x_dist, y_dist)
         
-    def plot(self, color=None):
-        super().plot(color="r")
-        self.piece.plot()
+    def plot(self, color=None, show_names:bool=True, show_rect:bool=True, **kwargs):
+        if show_rect:
+            super().plot(color="r")
+        self.piece.plot(show_names)
 
     def rotated_90(self, inplace=False):
         angle = np.pi/2

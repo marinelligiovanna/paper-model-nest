@@ -25,10 +25,11 @@ class Bin:
     def insert(rect: Rect) -> bool:
         raise NotImplementedError()
 
-    def plot(self):
+    def plot(self, show_names: bool=True, show_rects:bool=True):
         plt.figure(figsize=(9,6))
+        
         for rect in self.rects:
-            rect.plot(color="r")
+            rect.plot(color="r", show_names=show_names, show_rects=show_rects)
 
         plt.xlim(0, self.width)
         plt.ylim(0, self.height)

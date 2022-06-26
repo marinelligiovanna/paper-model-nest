@@ -142,7 +142,7 @@ class Rect:
 
         return False
      
-    def plot(self, color:str = "k") -> None:
+    def plot(self, color:str = "k", **kwargs) -> None:
         """Make a plot of the rectangle.
         """
         pairs = [(self.bottom_left, self.top_left,),

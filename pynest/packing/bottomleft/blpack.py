@@ -23,7 +23,6 @@ class BLPacker(PackingAlgorithm):
         
         
     def _add_bin(self):
-        print("Creating new bin!")
         bin = BLBin(self.bin_width, self.bin_height)
         self.bins.append(bin)
         self.n_bins += 1

@@ -29,6 +29,9 @@ class Polygon:
     def __iter__(self):
         return iter(self.segments)
 
+    def __len__(self):
+        return len(self.segments)
+
     def add_segment(self, segment:Segment):
         """Add a segment to the polygon.
 

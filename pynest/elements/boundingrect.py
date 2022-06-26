@@ -2,6 +2,7 @@ from pynest.elements.rect import Rect
 from pynest.elements.piece import Piece
 import numpy as np
 from pynest.utils import convex_hull_polygon
+from copy import deepcopy
 
 class MinBoundingRect(Rect):
     """A Minimum Bouding Rectangle represents a rectangle envelope
@@ -71,3 +72,13 @@ class MinBoundingRect(Rect):
     def plot(self, color=None):
         super().plot(color="r")
         self.piece.plot()
+
+    def rotated_90(self, inplace=False):
+        angle = np.pi/2
+        rect = self if inplace else deepcopy(self)
+
+        rect.rotate_90(inplace=True)
+        rect.piece.rotate(angle, center=(0,0,), inplace=True)
+        rect.translate_to(0,0)
+
+        return rect

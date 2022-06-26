@@ -10,5 +10,8 @@ class PackingAlgorithm:
         self.rects: tp.List[Rect] = rects
         self.bins: tp.List[Bin] = []
 
+    def free_area(self):
+        raise NotImplementedError
+
     def pack(self):
         raise NotImplementedError

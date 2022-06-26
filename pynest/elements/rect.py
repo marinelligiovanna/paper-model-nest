@@ -156,3 +156,18 @@ class Rect:
             y = [p1[1], p2[1]]
 
             plt.plot(x, y, f'{color}-', lw=1)
+
+    def rotate_90(self, inplace=False):
+        w, h = self.width, self.height
+
+        if inplace:
+            self.width = h
+            self.height = w
+            self.x = -h
+            return self
+        else:
+            return Rect(-h, self.y, h, w)
+
+    def rotated_90(self, inplace=False):
+        return self.rotate_90(inplace)
+        

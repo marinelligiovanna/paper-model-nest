@@ -7,6 +7,7 @@ class BLBin(Bin):
     def __init__(self, width:float, height:float) -> None:
         super().__init__(width, height)
         self.free_rects: tp.List[Rect] = [Rect(0, 0, width, height)]
+        self.free_area = width * height
 
     def _BL_criteria(self, free_rect:Rect, rect: Rect):
         """The Bottom-Left (BL) criteria consists in finding the 
@@ -19,7 +20,7 @@ class BLBin(Bin):
         """
         return free_rect.y + rect.height, free_rect.x
 
-    def _find_best_free_rect(self, rect: Rect) -> Rect:
+    def _find_best_free_rect(self, rect: Rect, allow_rotation:bool=True) -> Rect:
         """Finds the best place to put the rectangle by using
         the bottom-left criteria
 
@@ -30,18 +31,22 @@ class BLBin(Bin):
             Rect: The best free rect to put the rect
         """
         rects = []
+        rotated_rect = rect.rotated_90()
         
         for free_rect in self.free_rects:
             if rect.fit_into(free_rect):
                 criteria = self._BL_criteria(free_rect, rect)
-                rects.append((criteria, free_rect))
+                rects.append((criteria, free_rect, False))
+            if allow_rotation and rotated_rect.fit_into(free_rect):
+                criteria = self._BL_criteria(free_rect, rotated_rect)
+                rects.append((criteria, free_rect, True))
 
         if len(rects) == 0:
-            return None
+            return None, None
 
-        _, best_rect = min(rects, key = lambda x: x[0])
+        _, best_rect, rotated = min(rects, key = lambda x: x[0])
 
-        return best_rect
+        return best_rect, rotated
 
     def _split_free_rect(self, free_rect:Rect, rect: Rect) -> tp.List[Rect]:
         """Given a free rectangle, split it into two
@@ -165,7 +170,7 @@ class BLBin(Bin):
         self.free_rects = r
         
 
-    def insert(self, rect: Rect) -> bool:
+    def insert(self, rect: Rect, allow_rotation:bool=True) -> bool:
         """Insert a rectangle into the bin.
 
         Args:
@@ -181,11 +186,14 @@ class BLBin(Bin):
         if rect.area() > self.available_area:
             return False
 
-        bfr = self._find_best_free_rect(rect)
+        bfr, rotated = self._find_best_free_rect(rect, allow_rotation=allow_rotation)
 
         if bfr is not None:
             # Translate the rectangle to the x,y coordinates of the
             # free rectangle that it fits
+            if rotated:
+                rect = rect.rotated_90()
+
             x, y = bfr.x, bfr.y
             rect.translate_to(x, y)
 
@@ -205,7 +213,8 @@ class BLBin(Bin):
             # and also fully-contained free rectangles
             self._remove_intersections(rect)
 
-
+            self.free_area -= rect.area()
+            
             return True
 
         return False

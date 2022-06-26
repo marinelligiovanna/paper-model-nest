@@ -71,6 +71,9 @@ class PaperModel:
         pieces = []
         self._create_pieces_from_groups(groups, pieces)
 
+        # Remove pieces without len
+        pieces = [p for p in pieces if len(p) > 0]
+
         self.pieces = pieces
 
     def _set_bounding_rects(self):
@@ -89,5 +92,4 @@ if __name__ == "__main__":
     import os
     data_path = f"{os.getcwd()}/pynest/data/svgs"
 
-    model = PaperModel(f'{data_path}/harry-potter.svg')
-    print(model)
+    model = PaperModel(f'{data_path}/e190-e2.svg')
